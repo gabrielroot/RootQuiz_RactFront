@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import { Grid,
          Button,
          Header,
-         Image,
          Modal 
 } from 'semantic-ui-react'
 import Navigation from '../components/Navigation'
@@ -11,11 +10,11 @@ import services from '../services/api'
 
 export default function Quiz() {
     const [data, setData] = useState({})
-    const [options, setOptions] = useState(['font', 'bold', 'copyright', 'dochub'])
+    const options = ['font', 'bold', 'copyright', 'dochub']
     const [open, setOpen] = useState(false)
     const [resposta, setResposta] = useState('')
     const [userStatistics, setUserStatistics] = useState({})
-
+    
 
     useEffect(() => {
         proximaPergunta()

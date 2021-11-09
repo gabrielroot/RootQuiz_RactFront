@@ -17,7 +17,7 @@ export default function Router() {
             </Routes>
 
             <Routes>
-                <Route exact path="/admin/pergunta/nova" element={<Questao/>}/>
+                <Route exact path="/admin/pergunta/editar/*" element={<Questao/>}/>
             </Routes>
 
             <Routes>
