@@ -2,7 +2,6 @@ import React from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Quiz from './pages/Quiz'
 import NotFound from './pages/NotFound'
-import Questao from './pages/Questao'
 import Admin from './pages/Admin'
 
 export default function Router() {
@@ -14,10 +13,6 @@ export default function Router() {
 
             <Routes>
                 <Route exact path="/admin/pergunta" element={<Admin/>}/>
-            </Routes>
-
-            <Routes>
-                <Route exact path="/admin/pergunta/editar/*" element={<Questao/>}/>
             </Routes>
 
             <Routes>

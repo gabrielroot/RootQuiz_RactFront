@@ -2,7 +2,9 @@ import React from 'react'
 import { Header,
          Image,
          Menu,
-         Grid } from 'semantic-ui-react'
+         Grid 
+} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 
 export default function Navigation() {
 
@@ -24,7 +26,7 @@ return (
 
         <Menu.Menu position='right'>
         <Menu.Item
-        name='Admin'
+            name='Admin'
         />
 
         <Menu.Item>

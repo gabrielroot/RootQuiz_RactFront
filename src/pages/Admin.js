@@ -1,251 +1,70 @@
-import React, {useEffect, useState} from 'react'
-import { Button, 
-         List, 
-         Header,
-         Icon,
-         Modal,
-         Grid,
-         Label,
-         Input,
-} from 'semantic-ui-react'
+import React, {useState} from 'react'
+import { Grid, Menu, Segment, Button, Icon } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
+import AdminPergunta from '../components/AdminPergunta'
+import AdminPessoas from '../components/AdminPessoas'
 import Navigation from '../components/Navigation'
-import services from '../services/api'
-import Alert from '../components/Alert'
 
 export default function Admin() {
-    const [perguntas, setPerguntas] = useState([])
-    const [edit, setEdit] = useState({
-        "id":-1,
-        "questao": '',
-        "respostaCorreta": 'a',
-        "usuario": 3,
-    })
-    const [respostas, setRespostas] = useState([
-        {id: -1, alternativa: ""}, 
-        {id: -1, alternativa: ""},
-        {id: -1, alternativa: ""}, 
-        {id: -1, alternativa: ""}
-    ]);
+    const [activeItem, setActiveItem] = useState('Perguntas')
     const [openModal, setOpenModal] = useState(false)
-    const [openPortal, setOpenPortal] = useState({open:false,header:'Sucesso!',type:'positive',message:'Operação bem sucedida.'})
 
-    useEffect(() => {
-        carregarPerguntas()
-    },[])
-
-    async function carregarPerguntas(){
-        const response = await services.Api.get(`/perguntas`)
-        setPerguntas(response.data)
-    }
-
-    async function apagarPergunta(e, id){
-        e.stopPropagation()
-        let updateData = await services.Api.delete(`/pergunta/${id}`)
-        if(updateData.status === 200){
-            setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'A pergunta foi removida.'})
-        }
-
-        updateData = perguntas.filter(item=> item.id !== id)
-        setPerguntas(updateData)
-    }
-
-    function handleQuestao(e){
-        const name = e.target.name
-        const value = e.target.value
-        setEdit({...edit,[name]:value})
-    }
-
-    function handleRespostas(e,i){
-        const value = e.target.value
-
-        let newArray = [...respostas]
-        newArray[i].alternativa = value
-
-        setRespostas(newArray)
-    }
-
-    function carregarDados(pergunta){
-        const opcoes = ['a', 'b', 'c', 'd']
-        for(let i=0;i<pergunta.respostas.length;i++){
-            if(pergunta.respostas[i].alternativa === pergunta.respostaCorreta){
-                edit.respostaCorreta = opcoes[i]
-                // setEdit({...edit, 'respostaCorreta':opcoes[i]})
-            }
-            let newArray = [...respostas]
-            newArray[i].alternativa = pergunta.respostas[i].alternativa
-            newArray[i].id = pergunta.respostas[i].id
-            setRespostas(newArray)
-        }
-
-        edit.id = pergunta.id
-        edit.questao = pergunta.questao
-        edit.usuario = pergunta.criadaPor
-
-
-        setOpenModal(true)
-    }
-
-    async function salvarPergunta(){
-        let isEdit = false
-        if(edit.id > -1)
-            isEdit = true
-
-        if(edit.questao.length === 0){
-            setOpenPortal({open:true,header:'Falha!',type:'negative',message:'Insira uma pergunta.'})
-            return
-        }
-        
-        
-        let isEmpt = false
-        for(let i=0; i<respostas.length; i++){
-            if(respostas[i].alternativa.length === 0){
-                isEmpt = true
-            }
-        }
-        
-        if(isEmpt){
-            setOpenPortal({open:true,header:'Falha!',type:'negative',message:'Preencha TODAS as alternativas.'})
-            return
-        }
-
-        switch(edit.respostaCorreta){
-            case 'a': edit.respostaCorreta = respostas[0].alternativa; break
-            case 'b': edit.respostaCorreta = respostas[1].alternativa; break
-            case 'c': edit.respostaCorreta = respostas[2].alternativa; break
-            case 'd': edit.respostaCorreta = respostas[3].alternativa; break
-            default : break;
-        }
-
-        let response
-        if(isEdit)
-            response = await services.Api.put(`/pergunta/${edit.id}`, {
-                ...edit,
-                respostas
-            })
-        else
-            response = await services.Api.post(`/pergunta`, {
-                ...edit,
-                respostas
-            })
-
-        if((response.status === 201 && !isEdit) || (response.status === 200 && isEdit)){
-            setEdit({...edit, 'id':-1}) 
-            edit.questao = '' 
-            setEdit({...edit, 'respostaCorreta':'a'}) 
-            setEdit({...edit, 'usuario': 3}) 
-            
-            for(let i=0; i<respostas.length; i++){
-                let newArray = [...respostas]
-                newArray[i].alternativa = ''
-                newArray[i].id = -1
-                setRespostas(newArray)
-            }
-
-            if(isEdit)
-                setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'A pergunta foi alterada.'})
-            else
-                setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'A pergunta foi criada.'})
-
-            carregarPerguntas()
-            setOpenModal(false)
-        }
-
+    function alterarTabMenu(e){
+        setActiveItem(e.target.innerHTML)
     }
 
     return (
         <div>
-            <Alert openPortal={openPortal}/>
             <Navigation />
-            <Grid centered columns={1}>
-                <Grid.Column textAlign='center' width='10'>
-                    <Grid.Row>
-                        <Header as='h3'>PAINEL ROOT: Gerencie suas perguntas</Header>
-                        <List animated divided verticalAlign='middle'>
-                            {perguntas.map((item, i)=>
-                                    <List.Item key={item.id}>
-                                        <List.Content floated='right'>
-                                            <Button color='green' icon='edit' onClick={()=>carregarDados(item)} content='Editar'/>
-                                            <Button color='red' onClick={(e)=>apagarPergunta(e,item.id)} icon='trash' content='Apagar'/>
-                                        </List.Content>
-                                            <Icon size='big' bordered name='question' />
-                                        <List.Content>{item.questao}</List.Content>
-                                    </List.Item>
-                            )}
-                        </List>
-                        <Link to='/'>
-                            <Button color='grey' size='big' animated>
-                                <Button.Content visible>Voltar para o Quiz</Button.Content>
-                                <Button.Content hidden>
-                                    <Icon name='arrow left' />
-                                </Button.Content>
-                            </Button>
-                        </Link>
-                        <Button color='green'  onClick={() => setOpenModal(true)} size='big' animated='fade'>
-                            <Button.Content visible>Nova Pergunta</Button.Content>
-                            <Button.Content hidden>
-                                <Icon name='add' />
-                            </Button.Content>
-                        </Button>
-                    </Grid.Row>
-                </Grid.Column>
-            </Grid>
+            <Grid>
+            <Grid.Column stretched width={14}>
+                {activeItem === 'Perguntas'?
+                    <Segment>
+                        <AdminPergunta openModal={openModal} setOpenModal={setOpenModal} />
+                    </Segment>
+                :
+                    <Segment>
+                        <AdminPessoas openModal={openModal} setOpenModal={setOpenModal} />
+                    </Segment>
+                }
+            </Grid.Column>
 
-            {openModal?
-            <Modal
-                closeIcon
-                open={openModal}
-                onClose={()=>setOpenModal(false)}
-                onOpen={() => setOpenModal(true)}
-                >
-                <Header icon='add' as='h2' content='Nova Pergunta' />
-                <Modal.Content>
-                    <Grid columns='2' centered>
-                        <Grid.Row>
-                            <Grid.Column>
-                                <Input labelPosition='left' size='big' type='text' placeholder='Insira a questão'>
-                                    <Label basic>?</Label>
-                                    <input required name='questao' value={edit.questao} onChange={(e)=>handleQuestao(e)} />
-                                </Input>
+            <Grid.Column width={2}>
+                <Menu fluid vertical tabular='right'>
+                    <Menu.Item
+                    name='Perguntas'
+                    active={activeItem === 'Perguntas'}
+                    onClick={alterarTabMenu}
+                    />
+                    <Menu.Item
+                    name='Pessoas'
+                    active={activeItem === 'Pessoas'}
+                    onClick={alterarTabMenu}
+                    />
+                </Menu>
+            </Grid.Column>
 
-                                <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
-                                    <Label basic>A</Label>
-                                    <input required name='a' value={respostas[0].alternativa} onChange={(e)=>handleRespostas(e, 0)} />
-                                    <Button toggle name="respostaCorreta" value="a" active={edit.respostaCorreta === 'a'} onClick={(e)=>handleQuestao(e)}>
-                                        Correta
-                                    </Button>
-                                </Input>
-                                <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
-                                    <Label basic>B</Label>
-                                    <input required name='b' value={respostas[1].alternativa} onChange={(e)=>handleRespostas(e, 1)}/>
-                                    <Button toggle name="respostaCorreta" value="b" active={edit.respostaCorreta === 'b'} onClick={(e)=>handleQuestao(e)}>
-                                        Correta
-                                    </Button>
-                                </Input>
-                                <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
-                                    <Label basic>C</Label>
-                                    <input required name='c' value={respostas[2].alternativa} onChange={(e)=>handleRespostas(e, 2)}/>
-                                    <Button toggle name="respostaCorreta" value="c" active={edit.respostaCorreta === 'c'} onClick={(e)=>handleQuestao(e)}>
-                                        Correta
-                                    </Button>
-                                </Input>
-                                <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
-                                    <Label basic>D</Label>
-                                    <input required={true} name='d' value={respostas[3].alternativa} onChange={(e)=>handleRespostas(e, 3)}/>
-                                    <Button toggle name="respostaCorreta" value="d" active={edit.respostaCorreta === 'd'} onClick={(e)=>handleQuestao(e)}>
-                                        Correta
-                                    </Button>
-                                </Input>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button color='red' onClick={()=>setOpenModal(false)} content='Cancelar' icon='cancel' labelPosition='left'/>
-                    <Button color='blue' content='Salvar' onClick={()=>salvarPergunta()} icon='save' labelPosition='right'/>
-                </Modal.Actions>
-            </Modal>:null}
+            <Link to='/'>
+                <Button color='grey' size='big' animated>
+                    <Button.Content visible>Voltar para o Quiz</Button.Content>
+                    <Button.Content hidden>
+                        <Icon name='arrow left' />
+                    </Button.Content>
+                </Button>
+            </Link>
+            
+            <Button color='green'  onClick={() => setOpenModal(true)} size='big' animated='fade'>
+                {activeItem === 'Perguntas'?
+                    <Button.Content visible>Nova Pergunta</Button.Content>
+                :
+                    <Button.Content visible>Novo Usuário</Button.Content>
+                }
+                <Button.Content hidden>
+                    <Icon name='add' />
+                </Button.Content>
+            </Button>
+        </Grid>
         </div>
     )
 }

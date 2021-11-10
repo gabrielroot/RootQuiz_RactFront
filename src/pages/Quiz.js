@@ -4,8 +4,8 @@ import { Grid,
          Header,
          Modal 
 } from 'semantic-ui-react'
-import Navigation from '../components/Navigation'
 
+import Navigation from '../components/Navigation'
 import services from '../services/api'
 
 export default function Quiz() {
