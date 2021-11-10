@@ -12,7 +12,7 @@ export default function Router() {
             </Routes>
 
             <Routes>
-                <Route exact path="/admin/pergunta" element={<Admin/>}/>
+                <Route exact path="/admin" element={<Admin/>}/>
             </Routes>
 
             <Routes>

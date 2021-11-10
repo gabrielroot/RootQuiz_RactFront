@@ -8,7 +8,6 @@ import { Button,
          Label,
          Input,
 } from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
 
 import services from '../services/api'
 import Alert from '../components/Alert'
@@ -19,7 +18,6 @@ export default function AdminPergunta(props) {
         "id":-1,
         "questao": '',
         "respostaCorreta": 'a',
-        "usuario": 3,
     })
     const [respostas, setRespostas] = useState([
         {id: -1, alternativa: ""}, 
@@ -68,7 +66,6 @@ export default function AdminPergunta(props) {
         edit.id = -1 
             edit.questao = '' 
             edit.respostaCorreta = 'a' 
-            edit.usuario = 3 
             
             for(let i=0; i<respostas.length; i++){
                 let newArray = [...respostas]
@@ -92,7 +89,6 @@ export default function AdminPergunta(props) {
 
         edit.id = pergunta.id
         edit.questao = pergunta.questao
-        edit.usuario = pergunta.criadaPor
 
 
         props.setOpenModal(true)
