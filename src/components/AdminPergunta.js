@@ -17,6 +17,7 @@ export default function AdminPergunta(props) {
     const [edit, setEdit] = useState({
         "id":-1,
         "questao": '',
+        "usuario": 3,
         "respostaCorreta": 'a',
     })
     const [respostas, setRespostas] = useState([

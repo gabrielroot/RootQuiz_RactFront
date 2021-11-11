@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react'
 import {
         Segment,
         Portal,
-        Message
+        Message,
+        TransitionablePortal
 } from 'semantic-ui-react'
 
 export default function Alert(props) {
@@ -14,25 +15,30 @@ export default function Alert(props) {
     },[props.openPortal])
 
     return (
-        <Portal onClose={()=>setOpenPortal({...openPortal,open:false})}  open={openPortal.open}>
-                <Segment
-                onClick={()=>setOpenPortal({...openPortal, open:false})}
-                style={{
-                    left: '60%',
-                    position: 'fixed',
-                    top: '0',
-                    zIndex: 1000,
-                }}
-                >
+        <TransitionablePortal
+            closeOnTriggerClick
+            onClose={()=>setOpenPortal({...openPortal,open:false})}
+            open={openPortal.open}
+            transition={{animation:'fly up', duration:800}}
+        >
+            <Segment
+            onClick={()=>setOpenPortal({...openPortal, open:false})}
+            style={{
+                left: '60%',
+                position: 'fixed',
+                top: '0',
+                zIndex: 1000,
+            }}
+            >
 
-                    <Message negative={openPortal.type==='negative'} positive={openPortal.type==='positive'} size='large'>
-                        <Message.Header>{openPortal.header}</Message.Header>
-                        <p>
-                            {openPortal.message}
-                        </p>
-                    </Message>
+                <Message negative={openPortal.type==='negative'} positive={openPortal.type==='positive'} size='large'>
+                    <Message.Header>{openPortal.header}</Message.Header>
+                    <p>
+                        {openPortal.message}
+                    </p>
+                </Message>
 
-                </Segment>
-            </Portal>
+            </Segment>
+        </TransitionablePortal>
     )
 }

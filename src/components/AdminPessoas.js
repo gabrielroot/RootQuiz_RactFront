@@ -179,7 +179,7 @@ export default function AdminPessoas(props) {
                         <Grid.Row>
                             <Grid.Column>
                                 <Input labelPosition='left' size='big' type='text' placeholder='Nome'>
-                                    <Label basic>N</Label>
+                                    <Label basic>Nome</Label>
                                     <input required name='nome' value={edit.nome} onChange={(e)=>handleQuestao(e)} />
                                 </Input>
                                 <Radio toggle label="Administrador" onClick={()=>setEdit({...edit, privilegio: edit.privilegio === 1? 0: 1})} checked={edit.privilegio === 1} />
