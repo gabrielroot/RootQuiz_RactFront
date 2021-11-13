@@ -4,6 +4,7 @@ import { Grid,
          Header,
          Modal 
 } from 'semantic-ui-react'
+import  {useNavigate } from 'react-router-dom'
 
 import Navigation from '../components/Navigation'
 import services from '../services/api'
@@ -14,6 +15,7 @@ export default function Quiz() {
     const [open, setOpen] = useState(false)
     const [resposta, setResposta] = useState('')
     const [userStatistics, setUserStatistics] = useState({})
+    const navigate = useNavigate()
     
 
     useEffect(() => {
@@ -21,8 +23,13 @@ export default function Quiz() {
     },[])
 
     async function proximaPergunta(){
-        const response = await services.Api.get(`/pergunta/aleatoria`)
-        setData(response.data)
+        try{
+
+            const response = await services.Api.get(`/pergunta/aleatoria`)
+            setData(response.data)
+        }catch(err){
+            navigate('/login')
+        }
     }
 
     function closeModal(){
@@ -31,17 +38,21 @@ export default function Quiz() {
     }
 
     async function responder (answer){
-        await services.Api.post(`/tentativa`, {
-            "status": data.respostaCorreta === answer ? true : false,
-            "usuario_id": 3,
-            "pergunta_id": data.id
-        })
+        try{
 
-        const usuario = await services.Api.get(`/usuario/3`)
-        setUserStatistics(usuario.data)
-
-        setOpen(true)
-        setResposta(answer)
+            await services.Api.post(`/tentativa`, {
+                "status": data.respostaCorreta === answer ? true : false,
+                "pergunta_id": data.id
+            })
+            
+            const usuario = await services.Api.get(`/usuario/${localStorage.getItem('userId')}`)
+            setUserStatistics(usuario.data)
+            
+            setOpen(true)
+            setResposta(answer)
+        }catch(err){
+            navigate('/login')
+        }
     }
 
     return (

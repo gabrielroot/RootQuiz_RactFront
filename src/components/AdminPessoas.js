@@ -9,40 +9,51 @@ import { Button,
          Input,
          Radio
 } from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
+import  {useNavigate } from 'react-router-dom'
 
 import services from '../services/api'
 import Alert from '../components/Alert'
 
 export default function AdminPessoas(props) {
-    const [perguntas, setPerguntas] = useState([])
+    const [usuarios, setUsuarios] = useState([])
     const [edit, setEdit] = useState({
         "id": -1,
         "nome": "",
-        "privilegio": 0,
-        "senha": ""
+        "username": "",
+        "roles": ['ROLE_USER'],
+        "password": ""
     })
-
     const [openPortal, setOpenPortal] = useState({open:false,header:'Sucesso!',type:'positive',message:'Operação bem sucedida.'})
+    const navigate = useNavigate()
 
     useEffect(() => {
-        carregarPerguntas()
+        carregarUsuarios()
     },[])
 
-    async function carregarPerguntas(){
-        const response = await services.Api.get(`/usuarios`)
-        setPerguntas(response.data)
+    async function carregarUsuarios(){
+        try{
+
+            const response = await services.Api.get(`/usuario`)
+            setUsuarios(response.data)
+        }catch(err){
+            navigate('/login')
+        }
     }
 
     async function apagarPergunta(e, id){
         e.stopPropagation()
-        let updateData = await services.Api.delete(`/usuario/${id}`)
-        if(updateData.status === 200){
-            setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'O usuário foi removido.'})
-        }
+        try{
 
-        updateData = perguntas.filter(item=> item.id !== id)
-        setPerguntas(updateData)
+            let updateData = await services.Api.delete(`/usuario/${id}`)
+            if(updateData.status === 200){
+                setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'O usuário foi removido.'})
+            }
+            
+            updateData = usuarios.filter(item=> item.id !== id)
+            setUsuarios(updateData)
+        }catch(err){
+            navigate('/login')
+        }
     }
 
     function handleQuestao(e){
@@ -54,7 +65,8 @@ export default function AdminPessoas(props) {
     function carregarDados(pergunta){
         edit.id = pergunta.id
         edit.nome = pergunta.nome
-        edit.privilegio = pergunta.privilegio
+        edit.username = pergunta.username
+        edit.roles = [pergunta.roles[0]]
 
 
         props.setOpenModal(true)
@@ -63,8 +75,9 @@ export default function AdminPessoas(props) {
     function limparDados(){
         edit.id = -1 
         edit.nome = '' 
-        edit.privilegio = 0 
-        edit.senha = "" 
+        edit.username = '' 
+        edit.roles = ['ROLE_USER'] 
+        edit.password = "" 
     }
 
     async function salvarPergunta(){
@@ -81,26 +94,29 @@ export default function AdminPessoas(props) {
             setOpenPortal({open:true,header:'Falha!',type:'negative',message:'Insira uma senha.'})
             return
         }
-        
+
         let response
-        if(isEdit)
+        if(isEdit){
+            localStorage.setItem('userRole', edit.roles[0])
+            localStorage.setItem('userName', edit.username)
             response = await services.Api.put(`/usuario/${edit.id}`, {
                 nome: edit.nome,
-                privilegio: edit.privilegio
+                username: edit.username,
+                roles: edit.roles,
             })
-        else
-            response = await services.Api.post(`/usuario`, {
-                ...edit,
-            })
-
+        }else
+        response = await services.Api.post(`/usuario`, {
+            ...edit,
+        })
+        
         if((response.status === 201 && !isEdit) || (response.status === 200 && isEdit)){
             limparDados()
             if(isEdit)
-                setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'O usuário foi alterado.'})
+            setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'O usuário foi alterado.'})
             else
-                setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'O usuário foi criado.'})
-
-            carregarPerguntas()
+            setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'O usuário foi criado.'})
+            
+            carregarUsuarios()
             props.setOpenModal(false)
         }
 
@@ -112,9 +128,9 @@ export default function AdminPessoas(props) {
             <Grid centered columns={1}>
                 <Grid.Column textAlign='center' width='15'>
                     <Grid.Row>
-                        <Header as='h3'>PAINEL ROOT: Gerencie os usuários</Header>
+                        <Header as='h3'>Painel Root: Gerencie os usuários</Header>
                         <List animated divided verticalAlign='middle'>
-                            {perguntas.map((item, i)=>
+                            {usuarios.map((item, i)=>
                                     <List.Item key={item.id}>
                                         <Grid centered columns={4}>
                                             <Grid.Column textAlign='center'>
@@ -131,7 +147,7 @@ export default function AdminPessoas(props) {
 
                                             <Grid.Column textAlign='center'>
                                                 <Grid.Row>
-                                                    <List.Content>{item.privilegio?<><b>Admin</b></>:<><b>Comum</b></>}</List.Content>
+                                                    <List.Content>{item.roles[0] === 'ROLE_ADMIN'?<><b>Admin</b></>:<><b>Comum</b></>}</List.Content>
                                                 </Grid.Row>
                                             </Grid.Column>
                                             
@@ -178,15 +194,24 @@ export default function AdminPessoas(props) {
                     <Grid columns='2' centered>
                         <Grid.Row>
                             <Grid.Column>
+                                <Input labelPosition='left' size='big' type='text' placeholder='Login'>
+                                    <Label basic>Login</Label>
+                                    <input required name='username' value={edit.username} onChange={(e)=>handleQuestao(e)} />
+                                </Input>
                                 <Input labelPosition='left' size='big' type='text' placeholder='Nome'>
                                     <Label basic>Nome</Label>
                                     <input required name='nome' value={edit.nome} onChange={(e)=>handleQuestao(e)} />
                                 </Input>
-                                <Radio toggle label="Administrador" onClick={()=>setEdit({...edit, privilegio: edit.privilegio === 1? 0: 1})} checked={edit.privilegio === 1} />
+                                <Radio 
+                                    toggle 
+                                    label="Administrador" 
+                                    onClick={()=>setEdit({...edit, roles: edit.roles[0] === 'ROLE_ADMIN'? ['ROLE_USER']: ['ROLE_ADMIN']})} 
+                                    checked={edit.roles[0] === 'ROLE_ADMIN'} 
+                                />
                                 {edit.id > -1?null:
                                     <Input labelPosition='left' size='big' type='password' placeholder='Senha'>
                                         <Label basic>***</Label>
-                                        <input required name='senha' value={edit.password} onChange={(e)=>handleQuestao(e)} />
+                                        <input required name='password' value={edit.password} onChange={(e)=>handleQuestao(e)} />
                                     </Input>
                                 }
 

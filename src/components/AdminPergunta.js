@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Button, 
+import { Button,
          List, 
          Header,
          Icon,
@@ -8,6 +8,7 @@ import { Button,
          Label,
          Input,
 } from 'semantic-ui-react'
+import  {useNavigate } from 'react-router-dom'
 
 import services from '../services/api'
 import Alert from '../components/Alert'
@@ -17,7 +18,6 @@ export default function AdminPergunta(props) {
     const [edit, setEdit] = useState({
         "id":-1,
         "questao": '',
-        "usuario": 3,
         "respostaCorreta": 'a',
     })
     const [respostas, setRespostas] = useState([
@@ -27,14 +27,22 @@ export default function AdminPergunta(props) {
         {id: -1, alternativa: ""}
     ]);
     const [openPortal, setOpenPortal] = useState({open:false,header:'Sucesso!',type:'positive',message:'Operação bem sucedida.'})
+    const navigate = useNavigate()
+
 
     useEffect(() => {
         carregarPerguntas()
     },[])
 
     async function carregarPerguntas(){
-        const response = await services.Api.get(`/perguntas`)
-        setPerguntas(response.data)
+        try{
+
+            const response = await services.Api.get(`/pergunta`)
+            setPerguntas(response.data)
+        }catch(err){
+            navigate('/login')
+        }
+
     }
 
     async function apagarPergunta(e, id){
@@ -82,9 +90,9 @@ export default function AdminPergunta(props) {
             if(pergunta.respostas[i].alternativa === pergunta.respostaCorreta){
                 edit.respostaCorreta = opcoes[i]
             }
-            let newArray = [...respostas]
-            newArray[i].alternativa = pergunta.respostas[i].alternativa
+            let newArray = respostas
             newArray[i].id = pergunta.respostas[i].id
+            newArray[i].alternativa = pergunta.respostas[i].alternativa
             setRespostas(newArray)
         }
 
@@ -125,29 +133,33 @@ export default function AdminPergunta(props) {
             case 'd': edit.respostaCorreta = respostas[3].alternativa; break
             default : break;
         }
+        try{
 
-        let response
-        if(isEdit)
+            let response
+            if(isEdit)
             response = await services.Api.put(`/pergunta/${edit.id}`, {
                 ...edit,
                 respostas
             })
-        else
+            else
             response = await services.Api.post(`/pergunta`, {
                 ...edit,
                 respostas
             })
-
-        if((response.status === 201 && !isEdit) || (response.status === 200 && isEdit)){
-            limparDados()
-
-            if(isEdit)
+            
+            if((response.status === 201 && !isEdit) || (response.status === 200 && isEdit)){
+                limparDados()
+                
+                if(isEdit)
                 setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'A pergunta foi alterada.'})
-            else
+                else
                 setOpenPortal({open:true,header:'Sucesso!',type:'positive',message:'A pergunta foi criada.'})
 
-            carregarPerguntas()
-            props.setOpenModal(false)
+                carregarPerguntas()
+                props.setOpenModal(false)
+            }
+        }catch(err){
+            navigate('/login')
         }
 
     }
@@ -158,7 +170,7 @@ export default function AdminPergunta(props) {
             <Grid centered columns={1}>
                 <Grid.Column textAlign='center'  width='14'>
                     <Grid.Row>
-                        <Header as='h3'>PAINEL ROOT: Gerencie suas perguntas</Header>
+                        <Header as='h3'>Painel Root: Gerencie suas perguntas</Header>
                         <List animated divided verticalAlign='middle'>
                             {perguntas.map((item, i)=>
                                     <List.Item key={item.id}>

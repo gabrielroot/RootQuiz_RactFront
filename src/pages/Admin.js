@@ -37,11 +37,14 @@ export default function Admin() {
                     active={activeItem === 'Perguntas'}
                     onClick={alterarTabMenu}
                     />
-                    <Menu.Item
-                    name='Pessoas'
-                    active={activeItem === 'Pessoas'}
-                    onClick={alterarTabMenu}
-                    />
+                    {localStorage.getItem('userRole') === 'ROLE_ADMIN'?
+                        <Menu.Item
+                        name='Pessoas'
+                        active={activeItem === 'Pessoas'}
+                        onClick={alterarTabMenu}
+                        />
+                    :null
+                    }
                 </Menu>
             </Grid.Column>
 
