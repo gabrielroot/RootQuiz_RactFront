@@ -8,6 +8,7 @@ import  {useNavigate } from 'react-router-dom'
 
 import Navigation from '../components/Navigation'
 import services from '../services/api'
+import {PerguntaStyled, ButtonAlternativaStyled} from '../styles'
 
 export default function Quiz() {
     const [data, setData] = useState({})
@@ -20,6 +21,7 @@ export default function Quiz() {
 
     useEffect(() => {
         proximaPergunta()
+        //eslint-disable-next-line
     },[])
 
     async function proximaPergunta(){
@@ -63,14 +65,14 @@ export default function Quiz() {
             <Grid centered columns={1} >
                 <div className='header'>
                     <Grid.Row>
-                        <Header as='h2'>{data.questao}</Header>
+                        <PerguntaStyled as='h2'>{data.questao}</PerguntaStyled>
                     </Grid.Row>
                 </div>
                 <Grid.Row >
                     <Grid.Column width={8}>
                         <Button.Group vertical labeled icon>
                             {data.id?options.map((item,i)=>
-                                    <Button key={data.id+i} onClick={()=>responder(data.respostas[i].alternativa)} size='massive' color='green' icon={item} content={data.respostas[i].alternativa} />
+                                    <ButtonAlternativaStyled key={data.id+i} onClick={()=>responder(data.respostas[i].alternativa)} size='massive' color='green' icon={item} content={data.respostas[i].alternativa} />
                             ):null}
                             </Button.Group> 
                     </Grid.Column>

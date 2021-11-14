@@ -1,11 +1,14 @@
 import 'semantic-ui-css/semantic.min.css'
 import Routes from './Router';
-
+import {BackgroudStyled} from './styles'
+ 
 function App() {
   return (
-    <>
-       <Routes />
-    </>
+    <div>
+        <Routes />
+        <BackgroudStyled>
+    </BackgroudStyled>
+      </div>
   );
 }
 

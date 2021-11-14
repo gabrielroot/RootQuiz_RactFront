@@ -12,6 +12,7 @@ import  {useNavigate } from 'react-router-dom'
 
 import services from '../services/api'
 import Alert from '../components/Alert'
+import {GridDataStyled} from '../styles'
 
 export default function AdminPergunta(props) {
     const [perguntas, setPerguntas] = useState([])
@@ -32,15 +33,24 @@ export default function AdminPergunta(props) {
 
     useEffect(() => {
         carregarPerguntas()
+        //eslint-disable-next-line
     },[])
 
     async function carregarPerguntas(){
         try{
-
             const response = await services.Api.get(`/pergunta`)
             setPerguntas(response.data)
         }catch(err){
-            navigate('/login')
+            let status
+            status = err.response === undefined?null:err.response.status
+            switch (status) {
+                case 401:
+                    navigate('/login')
+                    break;
+            
+                default:
+                    break;
+            }
         }
 
     }
@@ -159,7 +169,16 @@ export default function AdminPergunta(props) {
                 props.setOpenModal(false)
             }
         }catch(err){
-            navigate('/login')
+            let status
+            status = err.response === undefined?null:err.response.status
+            switch (status) {
+                case 401:
+                    navigate('/login')
+                    break;
+            
+                default:
+                    break;
+            }
         }
 
     }
@@ -167,35 +186,51 @@ export default function AdminPergunta(props) {
     return (
         <div>
             <Alert openPortal={openPortal}/>
-            <Grid centered columns={1}>
+            <GridDataStyled centered verticalAlign='middle' columns={1} >
                 <Grid.Column textAlign='center'  width='14'>
                     <Grid.Row>
                         <Header as='h3'>Painel Root: Gerencie suas perguntas</Header>
                         <List animated divided verticalAlign='middle'>
                             {perguntas.map((item, i)=>
                                     <List.Item key={item.id}>
-                                        <List.Content floated='right'>
-                                        <Button color='green' onClick={()=>carregarDados(item)} animated='vertical'>
-                                            <Button.Content visible>Editar</Button.Content>
-                                            <Button.Content hidden>
-                                                <Icon name='edit' />
-                                            </Button.Content>
-                                        </Button>
-                                        <Button color='red' onClick={(e)=>apagarPergunta(e,item.id)} animated='fade'>
-                                            <Button.Content visible>Apagar</Button.Content>
-                                            <Button.Content hidden>
-                                                <Icon name='trash' />
-                                            </Button.Content>
-                                        </Button>
-                                        </List.Content>
-                                            <Icon size='big' bordered name='question' />
-                                        <List.Content>{item.questao}</List.Content>
+                                        <Grid centered verticalAlign='middle' columns={3}>
+                                            <Grid.Column textAlign='center'>
+                                                <Grid.Row>
+                                                <Icon size='big' bordered name='question' />
+                                                </Grid.Row>
+                                            </Grid.Column>
+               
+                                            <Grid.Column textAlign='center'>
+                                                <Grid.Row>
+                                                    <List.Content>{item.questao}</List.Content>
+                                                </Grid.Row>
+                                            </Grid.Column>
+
+                                            <Grid.Column textAlign='center'>
+                                                <Grid.Row>
+                                                    <List.Content floated='right'>
+                                                        <Button color='green' onClick={()=>carregarDados(item)} animated='vertical'>
+                                                            <Button.Content visible>Editar</Button.Content>
+                                                            <Button.Content hidden>
+                                                                <Icon name='edit' />
+                                                            </Button.Content>
+                                                        </Button>
+                                                        <Button color='red' onClick={(e)=>apagarPergunta(e,item.id)} animated='fade'>
+                                                            <Button.Content visible>Apagar</Button.Content>
+                                                            <Button.Content hidden>
+                                                                <Icon name='trash' />
+                                                            </Button.Content>
+                                                        </Button>
+                                                    </List.Content>
+                                                </Grid.Row>
+                                            </Grid.Column>
+                                       </Grid>
                                     </List.Item>
                             )}
                         </List>
                     </Grid.Row>
                 </Grid.Column>
-            </Grid>
+            </GridDataStyled>
 
             {props.openModal?
             <Modal
@@ -204,7 +239,11 @@ export default function AdminPergunta(props) {
                 onClose={()=>{props.setOpenModal(false); limparDados()}}
                 onOpen={() => props.setOpenModal(true)}
                 >
-                <Header icon='add' as='h2' content='Nova Pergunta' />
+                {edit.id > -1?
+                    <Header icon='edit' as='h3' content='Editar Pergunta' />
+                :
+                    <Header icon='add' as='h3' content='Nova Pergunta' />
+                }
                 <Modal.Content>
                     <Grid columns='2' centered>
                         <Grid.Row>

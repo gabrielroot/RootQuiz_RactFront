@@ -6,8 +6,8 @@ if(window.location.hostname === 'localhost' | window.location.hostname === '127.
     baseURL = process.env.REACT_APP_BASE_URL_DEV
 else
     baseURL = process.env.REACT_APP_BASE_URL
-    const Api = axios.create({ baseURL, withCredentials: true})
 
+const Api = axios.create({ baseURL, withCredentials: true})
 const obj = { Api, baseURL }
 
 export default obj

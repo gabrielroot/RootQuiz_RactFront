@@ -10,17 +10,11 @@ export default function Router() {
         <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<Quiz/>}/>
-            </Routes>
 
-            <Routes>
                 <Route exact path="/admin" element={<Admin/>}/>
-            </Routes>
 
-            <Routes>
                 <Route exact path="/login" element={<Login/>}/>
-            </Routes>
 
-            <Routes>
                 <Route element={<NotFound/>}/>
             </Routes>
         </BrowserRouter>

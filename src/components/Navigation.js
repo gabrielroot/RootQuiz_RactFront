@@ -8,6 +8,7 @@ import { Header,
 } from 'semantic-ui-react'
 import {useNavigate} from 'react-router-dom'
 import services from '../services/api'
+import {LogoStyled, QuizStyled, HashTagStyled, RootStyled, PopupProfileStyled, HeaderAdminStyled} from '../styles'
 
 
 export default function Navigation() {
@@ -27,13 +28,11 @@ return (
         <Menu.Menu position='left'>
             <Grid.Column width='16'>
                 <Grid.Row>
-                    <div className='title'>
-                        <span onClick={()=>navigate('/')}>
-                            <p>Quiz</p>
-                            <p>#</p>
-                            <p>Root</p>
-                        </span>
-                    </div>
+                    <LogoStyled onClick={()=>navigate('/')}>
+                    <QuizStyled>Quiz</QuizStyled>
+                            <HashTagStyled>#</HashTagStyled>
+                            <RootStyled>Root</RootStyled>
+                    </LogoStyled>
                 </Grid.Row>
             </Grid.Column>
         </Menu.Menu>
@@ -41,9 +40,9 @@ return (
         <Menu.Menu position='right'>
                 <Menu.Item
                 >
-                    <div onClick={()=>navigate('/admin')}>
+                    <HeaderAdminStyled as='h4' onClick={()=>navigate('/admin')}>
                         Admin
-                    </div>
+                    </HeaderAdminStyled>
                 </Menu.Item>
 
         <Menu.Item>
@@ -52,19 +51,22 @@ return (
 
                     <Grid.Column floated='right' width='16'>
                         <Grid.Row>
-                            <Popup wide trigger={
-                                <Header as='h4'>
-                                    <Image circular src='/nonProfile.png' /> 
-                                    <Header.Content>
-                                    {localStorage.getItem('userName')}    
-                                    </Header.Content>
-                                </Header>} on='click'>
-                                <Grid>
-                                <Grid.Column>
-                                    <Button color='red' onClick={()=>encerrarSessao()} content='Encerrar Sessão' fluid />
-                                </Grid.Column>
-                                </Grid>
-                            </Popup>
+                            <PopupProfileStyled>
+                                <Popup wide trigger={
+
+                                        <Header as='h4'>
+                                            <Image circular src='/nonProfile.png' /> 
+                                            <Header.Content>
+                                            {localStorage.getItem('userName')}    
+                                            </Header.Content>
+                                        </Header>} on='click'>
+                                    <Grid>
+                                    <Grid.Column>
+                                        <Button color='red' onClick={()=>encerrarSessao()} content='Encerrar Sessão' fluid />
+                                    </Grid.Column>
+                                    </Grid>
+                                </Popup>
+                            </PopupProfileStyled>
                         </Grid.Row>
                     </Grid.Column>
                 </div>
