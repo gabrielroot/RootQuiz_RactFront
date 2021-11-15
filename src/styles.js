@@ -102,8 +102,8 @@ export const DivFloatedStyled = styled.div`
     width: 100vw !important;
     height: 20vh;
     margin-top: 5px ;
-    background-image: linear-gradient(to bottom, white 60%, #84ebb2);
-    box-shadow: #4a4a4a 0px 2px 20px 0px;
+    background-color: white;
+    box-shadow: #cbcbcb 0px 2px 20px 0px;
     align-items: center;
     z-index: 2;
     justify-content: space-evenly;
@@ -112,4 +112,12 @@ export const DivFloatedStyled = styled.div`
 export const GridDataStyled = styled(Grid)`
     max-height: 65vh;
     overflow: auto;
+`;
+
+export const ButtonBackStyled = styled(Button)`
+    box-shadow: #ababab 0px 5px 11px 4px !important;
+`;
+
+export const ButtonPerguntaStyled = styled(Button)`
+    box-shadow: #9acba6 0px 5px 11px 4px !important;
 `;

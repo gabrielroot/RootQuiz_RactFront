@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 import AdminPergunta from '../components/AdminPergunta'
 import AdminPessoas from '../components/AdminPessoas'
 import Navigation from '../components/Navigation'
-import {DivFloatedStyled} from '../styles'
+import {DivFloatedStyled, ButtonPerguntaStyled, ButtonBackStyled} from '../styles'
 
 export default function Admin() {
     const [activeItem, setActiveItem] = useState('Perguntas')
@@ -51,16 +51,16 @@ export default function Admin() {
                 <DivFloatedStyled>
 
                     <Link to='/'>
-                        <Button color='grey' size='big' animated>
+                        <ButtonBackStyled color='grey' size='big' animated>
                             <Button.Content visible>Voltar para o Quiz</Button.Content>
                             <Button.Content hidden>
                                 <Icon name='arrow left' />
                             </Button.Content>
-                        </Button>
+                        </ButtonBackStyled>
                     </Link>
                     
                     <Link to=''>
-                    <Button color='green'  onClick={() => setOpenModal(true)} size='big' animated='fade'>
+                    <ButtonPerguntaStyled color='green'  onClick={() => setOpenModal(true)} size='big' animated='fade'>
                         {activeItem === 'Perguntas'?
                             <Button.Content visible>Nova Pergunta</Button.Content>
                             :
@@ -69,7 +69,7 @@ export default function Admin() {
                         <Button.Content hidden>
                             <Icon name='add' />
                         </Button.Content>
-                    </Button>
+                    </ButtonPerguntaStyled>
                     </Link>
                 </DivFloatedStyled>
             </Grid>
