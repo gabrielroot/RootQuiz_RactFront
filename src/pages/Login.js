@@ -16,7 +16,8 @@ import {LoginFormStyled,
         LoginGridStyled,
         QuizStyled,
         HashTagStyled,
-        RootStyled
+        RootStyled,
+        InputStyled
 }  from '../styles'
 
 import services from '../services/api'
@@ -145,17 +146,17 @@ export default function Login() {
                             <Grid.Column>
                                 <Input labelPosition='left' size='big' type='text' placeholder='Login'>
                                     <Label basic>Login</Label>
-                                    <input required name='username' value={loginForm.username} onChange={(e)=>handleInputs(e)} />
+                                    <InputStyled required name='username' value={loginForm.username} onChange={(e)=>handleInputs(e)} />
                                 </Input>
 
                                 <Input labelPosition='left' size='big' type='text' placeholder='Nome'>
                                     <Label basic>Nome</Label>
-                                    <input required name='nome' value={loginForm.nome} onChange={(e)=>handleInputs(e)} />
+                                    <InputStyled required name='nome' value={loginForm.nome} onChange={(e)=>handleInputs(e)} />
                                 </Input>
 
                                 <Input labelPosition='left' size='big' type='password' placeholder='Senha'>
                                     <Label basic>***</Label>
-                                    <input required name='password' value={loginForm.password} onChange={(e)=>handleInputs(e)} />
+                                    <InputStyled required name='password' value={loginForm.password} onChange={(e)=>handleInputs(e)} />
                                 </Input>
                             </Grid.Column>
                         </Grid.Row>

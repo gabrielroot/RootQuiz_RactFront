@@ -8,7 +8,13 @@ import  {useNavigate } from 'react-router-dom'
 
 import Navigation from '../components/Navigation'
 import services from '../services/api'
-import {PerguntaStyled, ButtonAlternativaStyled} from '../styles'
+import {
+    PerguntaStyled, 
+    ButtonAlternativaStyled,
+    DivErroStyled,
+    DivAcertoStyled,
+    PointsStyled
+} from '../styles'
 
 export default function Quiz() {
     const [data, setData] = useState({})
@@ -30,7 +36,16 @@ export default function Quiz() {
             const response = await services.Api.get(`/pergunta/aleatoria`)
             setData(response.data)
         }catch(err){
-            navigate('/login')
+            let status
+            status = err.response === undefined?null:err.response.status
+            switch (status) {
+                case 401:
+                    navigate('/login')
+                    break;
+            
+                default:
+                    break;
+            }
         }
     }
 
@@ -89,17 +104,23 @@ export default function Quiz() {
                 <Modal.Content>
                     <Grid columns='2' centered>
                         <Grid.Row>
-                            {userStatistics.nome?userStatistics.nome:'Nome do Usuário'}
+                            
+                            <Header as='h2'>{userStatistics.nome?userStatistics.nome:'Nome do Usuário'}</Header>
                         </Grid.Row>
                         <Grid.Row>
-                            <Grid.Column>
-                                <p>{new Array(...userStatistics.tentativas).filter(tentativa => tentativa.status === true).length}</p>
-                                <p>Acertos</p>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <p>{new Array(...userStatistics.tentativas).filter(tentativa => tentativa.status === false).length}</p>
-                                <p>Erros</p>
-                            </Grid.Column>
+                                
+                                <Grid.Column width='4'>
+                                    <DivAcertoStyled>
+                                        <PointsStyled>{new Array(...userStatistics.tentativas).filter(tentativa => tentativa.status === true).length}</PointsStyled>
+                                        <b>Acertos</b>
+                                    </DivAcertoStyled>
+                                </Grid.Column>
+                                <Grid.Column  width='4'>
+                                    <DivErroStyled>
+                                        <PointsStyled>{new Array(...userStatistics.tentativas).filter(tentativa => tentativa.status === false).length}</PointsStyled>
+                                        <b>Erros</b>
+                                    </DivErroStyled>
+                                </Grid.Column>
                         </Grid.Row>
 
                     </Grid>

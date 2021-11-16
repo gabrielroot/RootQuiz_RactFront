@@ -80,7 +80,8 @@ export const LinkSignupStyled = styled.p`
 
 export const PerguntaStyled = styled(Header)`
     color: #1f1e20aa;
-    font-size: 40px;
+    font-size: 35px;
+    padding: 0 50px;
     margin-top: 70px !important;
 `;
 
@@ -89,6 +90,7 @@ export const ButtonAlternativaStyled = styled(Button)`
     text-align: left !important;
     font-size: 40px;
     width: 50vw !important;
+    min-width: 300px;
     margin-top: 5px !important;
 `;
 
@@ -120,4 +122,44 @@ export const ButtonBackStyled = styled(Button)`
 
 export const ButtonPerguntaStyled = styled(Button)`
     box-shadow: #9acba6 0px 5px 11px 4px !important;
+`;
+
+//QUIZ
+
+export const PointsStyled = styled.p`
+    font-size: 3em;
+    margin: 0 ;
+`;
+
+export const DivAcertoStyled = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background-color: #bdffbd;
+    box-shadow: #cedbce 0px 0px 9px;
+    height: 140px;
+    font-size: 1.5em;
+`;
+
+export const DivErroStyled = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background-color: #ffc7c7;
+    box-shadow: #dbcece 0px 0px 9px;
+    height: 140px;
+    font-size: 1.5em;
+`;
+
+//MODALS
+
+export const InputStyled = styled.input`
+    width: 60%;
+    margin-bottom: 100px;
+`;
+
+export const InputBigStyled = styled.input`
+    width: 100%;
 `;

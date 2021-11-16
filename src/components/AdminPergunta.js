@@ -12,7 +12,11 @@ import  {useNavigate } from 'react-router-dom'
 
 import services from '../services/api'
 import Alert from '../components/Alert'
-import {GridDataStyled} from '../styles'
+import {
+    GridDataStyled,
+    InputStyled,
+    InputBigStyled
+} from '../styles'
 
 export default function AdminPergunta(props) {
     const [perguntas, setPerguntas] = useState([])
@@ -250,33 +254,33 @@ export default function AdminPergunta(props) {
                             <Grid.Column>
                                 <Input labelPosition='left' size='big' type='text' placeholder='Insira a questão'>
                                     <Label basic>?</Label>
-                                    <input required name='questao' value={edit.questao} onChange={(e)=>handleQuestao(e)} />
+                                    <InputBigStyled required name='questao' value={edit.questao} onChange={(e)=>handleQuestao(e)} />
                                 </Input>
 
                                 <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
                                     <Label basic>A</Label>
-                                    <input required name='a' value={respostas[0].alternativa} onChange={(e)=>handleRespostas(e, 0)} />
+                                    <InputStyled required name='a' value={respostas[0].alternativa} onChange={(e)=>handleRespostas(e, 0)} />
                                     <Button toggle name="respostaCorreta" value="a" active={edit.respostaCorreta === 'a'} onClick={(e)=>handleQuestao(e)}>
                                         Correta
                                     </Button>
                                 </Input>
                                 <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
                                     <Label basic>B</Label>
-                                    <input required name='b' value={respostas[1].alternativa} onChange={(e)=>handleRespostas(e, 1)}/>
+                                    <InputStyled required name='b' value={respostas[1].alternativa} onChange={(e)=>handleRespostas(e, 1)}/>
                                     <Button toggle name="respostaCorreta" value="b" active={edit.respostaCorreta === 'b'} onClick={(e)=>handleQuestao(e)}>
                                         Correta
                                     </Button>
                                 </Input>
                                 <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
                                     <Label basic>C</Label>
-                                    <input required name='c' value={respostas[2].alternativa} onChange={(e)=>handleRespostas(e, 2)}/>
+                                    <InputStyled required name='c' value={respostas[2].alternativa} onChange={(e)=>handleRespostas(e, 2)}/>
                                     <Button toggle name="respostaCorreta" value="c" active={edit.respostaCorreta === 'c'} onClick={(e)=>handleQuestao(e)}>
                                         Correta
                                     </Button>
                                 </Input>
                                 <Input labelPosition='right' type='text' placeholder='Insira uma alternativa'>
                                     <Label basic>D</Label>
-                                    <input required={true} name='d' value={respostas[3].alternativa} onChange={(e)=>handleRespostas(e, 3)}/>
+                                    <InputStyled required={true} name='d' value={respostas[3].alternativa} onChange={(e)=>handleRespostas(e, 3)}/>
                                     <Button toggle name="respostaCorreta" value="d" active={edit.respostaCorreta === 'd'} onClick={(e)=>handleQuestao(e)}>
                                         Correta
                                     </Button>
