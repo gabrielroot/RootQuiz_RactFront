@@ -30,7 +30,7 @@ mounts:
         source_path: "sessions"
     "app/sessions":
         source: local
-    source_path: sessions
+        source_path: sessions
     
 
 web:
