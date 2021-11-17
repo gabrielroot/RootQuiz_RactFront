@@ -19,7 +19,7 @@ disk: 2048
 variables:
     env:
         # Tell Symfony to always install in production-mode.
-        REACT_APP_BASE_URL: 'https://www.main-bvxea6i-2hxm3hgianuis.us-3.platformsh.site/'
+        REACT_APP_BASE_URL: 'https://quizroot.frb.io'
 
 mounts:
     "web/uploads":
@@ -31,7 +31,12 @@ mounts:
     "app/sessions":
         source: local
         source_path: sessions
-    
+
+ cache:
+    enabled: true
+    default_ttl: 0
+    cookies: ['*']
+    headers: ['Accept', 'Accept-Language']
 
 web:
   commands: 
