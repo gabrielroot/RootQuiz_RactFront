@@ -44,7 +44,7 @@ export default function Login() {
                 setOpenPortal({open:true,header:'Erro!',type:'negative',message:'Preencha todos os campos.'})
                 return
             }
-
+            
             response = await services.Api.post(`/usuario/login`, {
                 ...loginForm
             })
@@ -64,8 +64,9 @@ export default function Login() {
                 case 401:
                     setOpenPortal({open:true,header:'Oops!',type:'negative',message:'Login e/ou senha incorretos.'})
                     break;
-            
+                    
                 default:
+                    setOpenPortal({open:true,header:'Oops!',type:'negative',message:'Erro no servidor.'})
                     break;
             }
         }
@@ -79,7 +80,6 @@ export default function Login() {
                 setOpenPortal({open:true,header:'Erro!',type:'negative',message:'Preencha todos os campos.'})
                 return
             }
-
             response = await services.Api.post(`/usuario/signup`, {
                 ...loginForm
             })
@@ -156,7 +156,7 @@ export default function Login() {
 
                                 <Input labelPosition='left' size='big' type='password' placeholder='Senha'>
                                     <Label basic>***</Label>
-                                    <InputStyled required name='password' value={loginForm.password} onChange={(e)=>handleInputs(e)} />
+                                    <InputStyled type='password' required name='password' value={loginForm.password} onChange={(e)=>handleInputs(e)} />
                                 </Input>
                             </Grid.Column>
                         </Grid.Row>
