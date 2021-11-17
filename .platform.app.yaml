@@ -1,4 +1,4 @@
-name: 'app'
+name: app
 
 # The runtime the application uses. The 'type' key defines the base container
 # image that will be used to run the application. There is a separate base
@@ -6,7 +6,7 @@ name: 'app'
 # in multiple versions. Check the Node.js documentation
 # (https://docs.platform.sh/languages/nodejs.html#supported-versions)
 # to find the supported versions for the 'nodejs' type.
-type: 'nodejs:16'
+type: nodejs:16
       
 
 # The following block defines a single writable directory, 'web/uploads'
@@ -18,7 +18,6 @@ disk: 2048
 
 variables:
     env:
-        # Tell Symfony to always install in production-mode.
         REACT_APP_BASE_URL: 'https://quizroot.frb.io'
 
 mounts:
@@ -32,7 +31,7 @@ mounts:
         source: local
         source_path: sessions
 
- cache:
+cache:
     enabled: true
     default_ttl: 0
     cookies: ['*']
