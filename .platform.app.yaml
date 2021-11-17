@@ -22,9 +22,15 @@ variables:
         REACT_APP_BASE_URL: 'https://www.main-bvxea6i-2hxm3hgianuis.us-3.platformsh.site/'
 
 mounts:
-  'web/uploads':
-    source: local
-    source_path: uploads
+    "web/uploads":
+        source: local
+        source_path: uploads
+    "/var/sessions":
+        source: local
+        source_path: "sessions"
+    "app/sessions":
+        source: local
+    source_path: sessions
     
 
 web:
