@@ -16,6 +16,11 @@ type: 'nodejs:16'
 # from within the source that the mount should point at. 
 disk: 2048
 
+variables:
+    env:
+        # Tell Symfony to always install in production-mode.
+        REACT_APP_BASE_URL: 'https://www.main-bvxea6i-2hxm3hgianuis.us-3.platformsh.site/'
+
 mounts:
   'web/uploads':
     source: local
