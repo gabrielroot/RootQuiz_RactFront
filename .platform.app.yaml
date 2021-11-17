@@ -13,7 +13,7 @@ type: 'nodejs:16'
 # The 'source' specifies where the writable mount is. The 'local' source
 # indicates that the mount point will point to a local directory on the
 # application container. The 'source_path' specifies the subdirectory
-# from within the source that the mount should point at. 
+
 disk: 2048
 
 variables:
