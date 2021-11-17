@@ -114,7 +114,7 @@ export default function Login() {
                         <LogoStyled onClick={()=>navigate('/')}>
                             <QuizStyled>Quiz</QuizStyled>
                             <HashTagStyled>#</HashTagStyled>
-                            <RootStyled>Root</RootStyled>
+                            <RootStyled>Rootv1</RootStyled>
                         </LogoStyled>
                         <LoginFormStyled onSubmit={HandleSubmit}>
                             <Form.Field>
