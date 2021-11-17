@@ -31,12 +31,6 @@ mounts:
         source: local
         source_path: sessions
 
-cache:
-    enabled: true
-    default_ttl: 0
-    cookies: ['*']
-    headers: ['Accept', 'Accept-Language']
-
 web:
   commands: 
     start: "npm start"
