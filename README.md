@@ -3,7 +3,7 @@ Um web app para fins de estudo. O objeto de aprendizagem foi o framework php Sym
 
 ### Tecnologias
 #### REST [[Link do Repo]](https://github.com/gabrielroot/RootQuiz_SymfonyRestAPI)
-- PHP 8.0
+- PHP 7.4
 - PostgreSql
 - Symfony 5.3
     1. Doctrine
