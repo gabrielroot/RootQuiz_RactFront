@@ -44,11 +44,9 @@ export default function Login() {
                 setOpenPortal({open:true,header:'Erro!',type:'negative',message:'Preencha todos os campos.'})
                 return
             }
-            
             response = await services.Api.post(`/usuario/login`, {
                 ...loginForm
             })
-
 
             if(response.status === 200){
                 localStorage.setItem('userId', response.data.id)

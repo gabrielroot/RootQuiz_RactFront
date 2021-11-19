@@ -42,7 +42,11 @@ export default function AdminPergunta(props) {
 
     async function carregarPerguntas(){
         try{
-            const response = await services.Api.get(`/pergunta`)
+            let response
+            if(localStorage.getItem('userRole')==='ROLE_ADMIN')
+                response = await services.Api.get(`/pergunta`)
+            else
+                response = await services.Api.get(`/pergunta/minhas`)
             setPerguntas(response.data)
         }catch(err){
             let status
@@ -195,6 +199,11 @@ export default function AdminPergunta(props) {
                     <Grid.Row>
                         <Header as='h3'>Painel Root: Gerencie suas perguntas</Header>
                         <List animated divided verticalAlign='middle'>
+                            {perguntas.length === 0
+                            ?
+                                <p style={{color:'red', marginTop:'100px'}}> Você não cadastrou nenhuma pergunta ainda :/</p>
+                            :null
+                            }
                             {perguntas.map((item, i)=>
                                     <List.Item key={item.id}>
                                         <Grid centered verticalAlign='middle' columns={3}>
